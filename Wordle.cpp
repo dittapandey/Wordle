@@ -3,8 +3,6 @@ using namespace std;
 #define all(x) x.begin(),x.end()
 #define tr(a,i) for(auto i : a)
 #define f(i,n) for(int i=0;i<n;i++)
-#define p match_list[5*(s[i]-'a') + i ]
-#define c count_list[s[i]-'a']
 int n;
 vector<string> possible_words, searchable_words,possible_words_backup, searchable_words_backup;
 vector<int> attempts;
