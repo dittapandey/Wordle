@@ -30,3 +30,9 @@ If you have around 104 5-letter words, the first guess is going to take a while,
 <p>
 Improvements possible: It is always possible to calculate score for n steps deep into the algorithm, and that always takes a while. And so instead of looking n steps deep for all the possible guesses, we can choose to look deeper for the top, say, 100 performers of the first guess. And while this may mean we may be overlooking some out-of-world guesses that don’t perform well in the first guess but rock in deep search, I am pretty sure this is not the case. And at each step, we first look for the best immediate performers, then search deeper for some of them. This should give us a good optimal solution. 
 </p>
+<h2>
+ Progress so far
+ </h2>
+ <p>
+ The algorithm to be used has been writted and optimised for the best performance in C++. Statistically, 3.8 guesses per word are needed by the bot to solve the problem.
+</p>
