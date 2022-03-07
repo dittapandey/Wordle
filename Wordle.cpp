@@ -233,23 +233,6 @@ cout<<n<<" words in database"<<endl;
 first_guess = "tares"; 
 
 cout<<"First guess is "<<first_guess<<endl;
-//zonal 5.9
-//crane 5.42
-//roite 5.12
-//
-// cout<<autoplay("sweat");
-
-// play(100);
-// play(possible_words_backup.size());
-// play(50);
-// cout<<next_suggestion();
-// cout<<autoplay(possible_words_backup[rand()%possible_words_backup.size()]);
-// play_random(100000);
-// play();
-// cout<<autoplay("gumbo");
-// play("gumbo");
-// play("gravy");
-// play("sutra");
 
 return 0;
 }
