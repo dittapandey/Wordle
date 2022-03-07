@@ -23,14 +23,6 @@ double calculate_score(string s) //buggy, non ideal
 
     tr(possible_words,t)
     {
-        // f(i,5)
-        // {
-        //     if(s[i]==t[i])
-        //     coeff[i]=2;
-        //     else if(count(all(s),s[i])==count(all(t),s[i]))
-        //     coeff[i]=1;
-        //     else coeff[i]=0;
-        // }
         
         f(i,5)
         if(s[i]==t[i])
