@@ -3,10 +3,13 @@ using namespace std;
 #define all(x) x.begin(),x.end()
 #define tr(a,i) for(auto i : a)
 #define f(i,n) for(int i=0;i<n;i++)
-int n;
+int n,m=15000;
 vector<string> possible_words, searchable_words,possible_words_backup, searchable_words_backup;
+string answer_file = "answers_original.txt";
+string search_words_file = "allowed_words.txt";
 vector<int> attempts;
 string first_guess;
+priority_queue<pair<int,string> > scores;
 void filter_data(string str, string res)    //perfect
 {
     for(int k=0;k<searchable_words.size();k++)
@@ -77,6 +80,7 @@ int calculate_score(string s)
 }
 string next_suggestion()
 {
+    while(!scores.empty()) scores.pop();
     if(possible_words.size()==1 ||possible_words.size()==2)
     return possible_words[0];
     if(possible_words.size()==0)
@@ -211,31 +215,43 @@ void play_random(int k)
     }
 }
 
-int main()
+void input(bool full_mode=0)
 {
-srand(time(0));
 string s;
-ifstream myfile;
-myfile.open("all_words.txt");
-// myfile.open("allowed_words.txt");
-while(myfile>>s)
+ifstream file;
+file.open(search_words_file);
+while(file>>s)
 searchable_words.push_back(s);
-myfile.close();
-// myfile.open("possible_words.txt");
-myfile.open("all_words.txt");
-while(myfile>>s)
+n=searchable_words.size();
+file.close();
+if(full_mode)
+possible_words=searchable_words;
+else
+{
+file.open(answer_file);
+f(i,m)
+if(file>>s)
 possible_words.push_back(s);
+file.close();
+}
+m=possible_words.size();
 possible_words_backup=possible_words;
 searchable_words_backup=searchable_words;
 
-n=searchable_words.size();
+}
 
-cout<<n<<" words in database"<<endl;
+int main()
+{
+input();
+
+cout<<n<<" words recognised, "<<m<<" possible answers."<<endl;
 
 // first_guess = "tares"; 
-first_guess = next_suggestion(); 
+// first_guess = next_suggestion(); 
 
-cout<<"First guess is "<<first_guess<<endl;
+// cout<<"First guess is "<<first_guess<<endl;
+
+// play(n);
 
 return 0;
 }
