@@ -216,11 +216,13 @@ int main()
 srand(time(0));
 string s;
 ifstream myfile;
-myfile.open("allowed_words.txt");
+myfile.open("all_words.txt");
+// myfile.open("allowed_words.txt");
 while(myfile>>s)
 searchable_words.push_back(s);
 myfile.close();
-myfile.open("possible_words.txt");
+// myfile.open("possible_words.txt");
+myfile.open("all_words.txt");
 while(myfile>>s)
 possible_words.push_back(s);
 possible_words_backup=possible_words;
@@ -230,7 +232,8 @@ n=searchable_words.size();
 
 cout<<n<<" words in database"<<endl;
 
-first_guess = "tares"; 
+// first_guess = "tares"; 
+first_guess = next_suggestion(); 
 
 cout<<"First guess is "<<first_guess<<endl;
 

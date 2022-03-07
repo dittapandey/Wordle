@@ -1,0 +1,17 @@
+The Game itself:
+1. Normal and hard mode
+2. Hints
+    1. one letter optimal hint
+    2. Full word optimal hint
+    3. Feedback for current word entry (Expected score)
+3. Storing average score by user vs average score by bot
+4. 
+
+Analytics:
+1. Expected points
+2. Obtained score
+3. Remaining possible words list and its size
+
+
+
+
