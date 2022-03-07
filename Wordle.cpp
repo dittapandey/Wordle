@@ -213,34 +213,23 @@ void play_random(int k)
 
 int main()
 {
-// first_guess="roate";
 srand(time(0));
-
-ifstream myfile;
-// myfile.open("allowed_words_full.txt");
-// myfile.open("allowed_words.txt");
-myfile.open("possible_words.txt");
-// myfile.open("real_words.txt");
 string s;
+ifstream myfile;
+myfile.open("allowed_words.txt");
 while(myfile>>s)
 searchable_words.push_back(s);
 myfile.close();
-// myfile.open("possible_words_full.txt");
 myfile.open("possible_words.txt");
-// myfile.open("real_words.txt");
-
-// myfile.open("allowed_words.txt");
 while(myfile>>s)
 possible_words.push_back(s);
 possible_words_backup=possible_words;
 searchable_words_backup=searchable_words;
+
 n=searchable_words.size();
+
 cout<<n<<" words in database"<<endl;
 
-// first_guess = next_suggestion();
-// first_guess = "roate";  //3.8014
-// first_guess = "crane"; //3.78991
-// first_guess = "irate"; 
 first_guess = "tares"; 
 
 cout<<"First guess is "<<first_guess<<endl;
@@ -255,7 +244,7 @@ cout<<"First guess is "<<first_guess<<endl;
 // play(50);
 // cout<<next_suggestion();
 // cout<<autoplay(possible_words_backup[rand()%possible_words_backup.size()]);
-play_random(100000);
+// play_random(100000);
 // play();
 // cout<<autoplay("gumbo");
 // play("gumbo");
