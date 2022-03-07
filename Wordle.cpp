@@ -1,15 +1,18 @@
 #include<bits/stdc++.h>
+#include<chrono>
+#include <ctime>
 using namespace std;
 #define all(x) x.begin(),x.end()
 #define tr(a,i) for(auto i : a)
 #define f(i,n) for(int i=0;i<n;i++)
-int n,m=15000;
+int n=15000,m=15000;
 vector<string> possible_words, searchable_words,possible_words_backup, searchable_words_backup;
 string answer_file = "answers_original.txt";
 string search_words_file = "allowed_words.txt";
+int coeff[5];
+int x[243];
 vector<int> attempts;
 string first_guess;
-priority_queue<pair<int,string> > scores;
 void filter_data(string str, string res)    //perfect
 {
     for(int k=0;k<searchable_words.size();k++)
@@ -46,49 +49,67 @@ void filter_data(string str, string res)    //perfect
     possible_words=temp_list;
 }
 
-int calculate_score(string s)
+int calculate_score(string s) //buggy, non ideal
 {
-    vector<int> x(243);
+    f(i,243)
+    x[i]=0;
+    int j;
+    int ans=0;
 
-    int score=0;
-    int coeff[5];
     tr(possible_words,t)
     {
-        score=0;
+        // f(i,5)
+        // {
+        //     if(s[i]==t[i])
+        //     coeff[i]=2;
+        //     else if(count(all(s),s[i])==count(all(t),s[i]))
+        //     coeff[i]=1;
+        //     else coeff[i]=0;
+        // }
+        
         f(i,5)
+        if(s[i]==t[i])
         {
-            if(s[i]==t[i])
-            coeff[i]=0;
-            else if(count(all(s),s[i])==count(all(t),s[i]))
-            coeff[i]=1;
-            else coeff[i]=2;
+            coeff[i]=2;
+            t[i]=' ';
         }
-        coeff[1]*=3;
-        coeff[2]*=9;
-        coeff[3]*=27;
-        coeff[4]*=81;
-        score=coeff[0]+coeff[1]+coeff[2]+coeff[3]+coeff[4];
-        x[score]++;
-    }
-    int ans=0;
-    // f(i,243) cout<<x[i]<<endl;
+        else 
+        {
+        coeff[i]=0;
+        j=-1;
+        while(++j<5)
+        if(t[j]==s[i])
+        {
+            coeff[i]=1;
+            t[j]=' ';
+            break;
+        }
 
-    // f(i,243) score+=x[i];
-    // cout<<score;
+        }
+        
+        x[coeff[0]+3*coeff[1]+9*coeff[2]+27*coeff[3]+81*coeff[4]]++;
+    }
+
     f(i,243) ans+=x[i]*x[i];
     return ans;
 }
-string next_suggestion()
+
+priority_queue<pair<int,string> > suggestions()
 {
-    while(!scores.empty()) scores.pop();
-    if(possible_words.size()==1 ||possible_words.size()==2)
-    return possible_words[0];
+    priority_queue<pair<int,string> > scores;
     if(possible_words.size()==0)
     {
         cout<<"Invalid word ";
         exit(0);
     }
-    //return searchable_words[rand()%searchable_words.size()];
+    if(possible_words.size()<=2)
+    {
+        scores.push({1e9,possible_words[0]});
+        if(possible_words.size()==2)
+        scores.push({1e9,possible_words[1]});
+        return scores;
+    }
+
     
     int score=1e9,current_score;
     string ans="No such word";
@@ -96,7 +117,7 @@ string next_suggestion()
     {
     
     current_score=calculate_score(s);
-    // cout<<s<<" "<<current_score<<'\n';
+    scores.push({-current_score,s});
 
     if(current_score<score)
     {
@@ -104,11 +125,13 @@ string next_suggestion()
         score=current_score;
     }
     }
-    // cout<<"Suggested "<<ans<<" with score "<<score<<endl;
-    return ans;
+    return scores;
 }
 
-
+string next_suggestion()
+{
+    return suggestions().top().second;
+}
 int autoplay(string s)   //perfect
 {
     int size=possible_words_backup.size();
@@ -169,9 +192,9 @@ int play(string s)   //perfect
 {
     possible_words=possible_words_backup;
     searchable_words=searchable_words_backup;
-    cout<<"Playing for "<<s<<endl;
+    // cout<<"Playing for "<<s<<endl;
     string suggestion=first_guess;
-    cout<<"Trying "<<suggestion<<endl;
+    // cout<<"Trying "<<suggestion<<endl;
     string result;
     int k=0;
     while(++k)
@@ -183,15 +206,15 @@ int play(string s)   //perfect
     f(i,5)
     if(suggestion[i]==s[i])
     result[i]='g';
-    cout<<"Result "<<result<<endl;
+    // cout<<"Result "<<result<<endl;
     if(result =="ggggg")
     break;
     filter_data(suggestion,result);
-    cout<<"Filtered list, "<<possible_words.size()<<" words remain."<<endl;
+    // cout<<"Filtered list, "<<possible_words.size()<<" words remain."<<endl;
     suggestion = next_suggestion();
-    cout<<"Trying "<<suggestion<<endl;
+    // cout<<"Trying "<<suggestion<<endl;
     }
-    cout<<"Got it in "<<k<<endl;
+    // cout<<"Got it in "<<k<<endl;
     return k;
     // autoplay(s,k+1);
 }
@@ -200,7 +223,8 @@ void play(int t)
     double score = 0.0;
     for(int i=0;i<t;i++)
     {    
-    score+=autoplay(possible_words_backup[i]);
+    // score+=autoplay(possible_words_backup[i]);
+    score+=play(possible_words_backup[i]);
     cout<<i+1<<" "<<score/(i+1)<<endl;
     }
 }
@@ -220,7 +244,8 @@ void input(bool full_mode=0)
 string s;
 ifstream file;
 file.open(search_words_file);
-while(file>>s)
+f(i,n)
+if(file>>s)
 searchable_words.push_back(s);
 n=searchable_words.size();
 file.close();
@@ -237,21 +262,30 @@ file.close();
 m=possible_words.size();
 possible_words_backup=possible_words;
 searchable_words_backup=searchable_words;
+cout<<n<<" words recognised\n"<<m<<" possible answers\n"<<endl;
 
 }
-
+void show_scores(int k=10)
+{
+    auto scores = suggestions();
+    f(i,k)
+    {
+        cout<<scores.top().second<<" "<<
+        -scores.top().first<<endl;
+        scores.pop();
+    }
+}
 int main()
 {
-input();
+clock_t begin = clock();
+// m=500;
+input(1);
 
-cout<<n<<" words recognised, "<<m<<" possible answers."<<endl;
 
-// first_guess = "tares"; 
-// first_guess = next_suggestion(); 
+// show_scores();
 
-// cout<<"First guess is "<<first_guess<<endl;
-
-// play(n);
+clock_t end = clock();
+cout<<"Time taken :"<<double(end - begin) / CLOCKS_PER_SEC;
 
 return 0;
 }
